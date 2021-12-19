@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import React from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function getRandomArbitrary(min, max) {
+  return Math.floor(Math.random() * (max - min) + min)
 }
 
-export default App;
+function App() {
+  const initialgame = () => {
+    let initialState = []
+
+    for (let i = 0; i < 9; i++) {
+      let generatedvalue = getRandomArbitrary(1, 9)
+      while (initialState.includes(generatedvalue)) {
+        generatedvalue = getRandomArbitrary(1, 9)
+      }
+      initialState = [...initialState, generatedvalue]
+      console.log(initialState)
+    }
+    return initialState
+  }
+  const [gameState, setGameState] = React.useState(() => initialgame())
+
+  return <div className="App">{gameState}</div>
+}
+
+export default App
