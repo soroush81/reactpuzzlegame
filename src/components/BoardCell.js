@@ -1,10 +1,11 @@
 import React from 'react'
 import * as Constants from '../constants/Constants'
 
-const BoardCell = ({ number }) => {
+const BoardCell = ({ number, onClick }) => {
   return (
     <div
       key={number}
+      onClick={()=>onClick(number)}
       style={{
         borderWidth: 1,
         borderStyle: 'solid',

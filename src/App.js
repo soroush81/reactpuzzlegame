@@ -27,8 +27,45 @@ const initialgame = () => {
   return initialState
 }
 
+const findNeighborCells = (i, gameState)=>{
+  let neighborCells = []
+  if (i%Constants.BoardLevel !== 0)
+     neighborCells.push(gameState[i-1]) //left
+
+  if (i-Constants.BoardLevel > 0)
+    neighborCells.push(gameState[i-Constants.BoardLevel]) //top
+
+  if (i+Constants.BoardLevel < Constants.BoardSize)
+    neighborCells.push(gameState[i+Constants.BoardLevel]) //Bottom
+
+   if ((i+1)%Constants.BoardLevel !== 0)
+    neighborCells.push(gameState[i+1]) //right
+
+  return neighborCells;
+}
+
+
+
 function App() {
   const [gameState, setGameState] = React.useState(() => initialgame())
+
+  const handleCellClick = (i) => {
+  if (i === 0) return;
+
+  let clickedCellIndex = gameState.indexOf(i);
+  let neighborCells = findNeighborCells(clickedCellIndex, gameState);
+
+  const zeroExistsInNeighbors = neighborCells.indexOf(0);
+  if (zeroExistsInNeighbors === -1) return;
+
+  const zeroIndex = gameState.indexOf(0)
+
+  let newGameState = [...gameState]
+  let temp = newGameState[clickedCellIndex];
+  newGameState[clickedCellIndex] = newGameState[zeroIndex];
+  newGameState[zeroIndex] = temp;
+  setGameState(newGameState)
+}
 
   return (
     <div className="App" style={{ borderWidth: 1, borderStyle: 'solid' }}>
@@ -43,6 +80,7 @@ function App() {
             Constants.BoardLevel * (i - 1),
             Constants.BoardLevel * i,
           )}
+          onClick={handleCellClick}
         />
       ))}
     </div>

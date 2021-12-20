@@ -1,2 +1,2 @@
-export const BoardLevel = 5
-export const BoardSize = 5 ** 2
+export const BoardLevel = 4  
+export const BoardSize = BoardLevel ** 2
