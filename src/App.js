@@ -9,13 +9,12 @@ import {
   initialgame,
   getWinState,
 } from './utils/GameUtils'
-import { findAllInRenderedTree } from 'react-dom/cjs/react-dom-test-utils.production.min'
 
 function App() {
   const [gameState, setGameState] = React.useState(() => initialgame())
   const [gameOverState, setGameOverState] = React.useState(false)
   const [movesCount, setMovesCount] = React.useState(0)
-
+  const [level, setLevel] = React.useState(3)
   React.useEffect(() => {
     checkGameOver(gameState)
   }, [gameState])
@@ -32,7 +31,6 @@ function App() {
     newGameState[zeroIndex] = temp
     setGameState(newGameState)
     setMovesCount(movesCount + 1)
-    findAllInRenderedTree(movesCount)
   }
 
   const handleCellClick = (i) => {
@@ -52,38 +50,49 @@ function App() {
     setMovesCount(0)
   }
 
+  const handleChange = (e) => {
+    setLevel(e.target.value)
+  }
+
   return (
     <div className="App">
       <div
         style={{
-          borderColor: 'red',
-          borderStyle: 'solid',
-          borderWidth: 1,
-          width: '100%',
-          height: '100vh',
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
+          alignSelf: 'center',
         }}
       >
-        {Array.from(Array(Constants.BoardLevel + 1).keys()).map((i) => (
-          <BoardRow
-            key={i}
-            style={{
-              position: 'absolute',
-              top: (i - 1) * Constants.BoardLevel * 10,
-            }}
-            rowCells={gameState.slice(
-              Constants.BoardLevel * (i - 1),
-              Constants.BoardLevel * i,
-            )}
-            onClick={handleCellClick}
-          />
-        ))}
-        <div>moves : {movesCount}</div>
-        <div>
-          {gameOverState ? <GameOverPanel onReset={handleReset} /> : ''}
+        <div
+          style={{
+            position: 'absolute',
+            top: 50,
+            left: 300,
+          }}
+        >
+          {Array.from(Array(Constants.BoardLevel + 1).keys()).map((i) => (
+            <BoardRow
+              key={i}
+              style={{
+                position: 'absolute',
+                top: (i - 1) * Constants.BoardLevel * 10,
+              }}
+              rowCells={gameState.slice(
+                Constants.BoardLevel * (i - 1),
+                Constants.BoardLevel * i,
+              )}
+              onClick={handleCellClick}
+            />
+          ))}
         </div>
+      </div>
+      <div>moves : {movesCount}</div>
+      <div>{gameOverState ? <GameOverPanel onReset={handleReset} /> : ''}</div>
+      <div>
+        <select value={level} onChange={handleChange}>
+          <option value="3">Easy</option>
+          <option value="4">Medium</option>
+          <option value="5">Hard</option>
+          <option value="6">Expert</option>
+        </select>
       </div>
     </div>
   )
