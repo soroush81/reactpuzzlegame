@@ -2,15 +2,15 @@ import './App.css'
 import React from 'react'
 import { Box } from '@material-ui/core'
 import GameOverPanel from './components/GameOverPanel'
+import { useStyles } from './GameStyle.js'
+import { GameHeader } from './components/GameHeader'
+import GameBoard from './components/GameBoard'
 import {
   CompareGameState,
   findNeighborCells,
   initialgame,
   getWinState,
 } from './utils/GameUtils'
-import { useStyles } from './GameStyle.js'
-import { GameHeader } from './components/GameHeader'
-import GameBoard from './components/GameBoard'
 
 function App() {
   const classes = useStyles()
