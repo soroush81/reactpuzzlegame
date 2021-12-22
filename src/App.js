@@ -1,15 +1,15 @@
 import './App.css'
 import React from 'react'
 import { Box } from '@material-ui/core'
-import GameOverPanel from './components/GameOverPanel'
+import GameStatus from './components/GameStatus'
 import { useStyles } from './GameStyle.js'
 import { GameHeader } from './components/GameHeader'
 import GameBoard from './components/GameBoard'
 import {
-  CompareGameState,
   findNeighborCells,
   initialgame,
-  getWinState,
+  swapCells,
+  checkGameOver,
 } from './utils/GameUtils'
 
 function App() {
@@ -19,28 +19,14 @@ function App() {
     const savedGameState = window.localStorage.getItem('gameState')
     return savedGameState !== null ? JSON.parse(savedGameState) : initialgame()
   })
-  const [gameOverState, setGameOverState] = React.useState(false)
+  const [gameStatus, setGameStatus] = React.useState(false)
   const [movesCount, setMovesCount] = React.useState(0)
   const [level, setLevel] = React.useState(3)
 
   React.useEffect(() => {
-    checkGameOver(gameState)
+    setGameStatus(checkGameOver(gameState))
     window.localStorage.setItem('gameState', JSON.stringify(gameState))
   }, [gameState])
-
-  const checkGameOver = () => {
-    const winState = getWinState()
-    if (CompareGameState(gameState, winState)) setGameOverState(true)
-  }
-
-  function swapCells(clickedCellIndex, zeroIndex) {
-    let newGameState = [...gameState]
-    let temp = newGameState[clickedCellIndex]
-    newGameState[clickedCellIndex] = newGameState[zeroIndex]
-    newGameState[zeroIndex] = temp
-    setGameState(newGameState)
-    setMovesCount(movesCount + 1)
-  }
 
   const handleCellClick = (i) => {
     if (i === 0) return
@@ -55,12 +41,15 @@ function App() {
 
     //swap zero cell and selectedcell
     const zeroIndex = gameState.indexOf(0)
-    swapCells(clickedCellIndex, zeroIndex)
+
+    //set game state and moveCounts
+    setGameState(swapCells(clickedCellIndex, zeroIndex, gameState))
+    setMovesCount(movesCount + 1)
   }
 
   const handleReset = () => {
     setGameState(initialgame())
-    setGameOverState(false)
+    setGameStatus(false)
     setMovesCount(0)
   }
 
@@ -79,7 +68,7 @@ function App() {
       />
       <Box className={classes.GameContainer}>
         <GameBoard gameState={gameState} onCellClick={handleCellClick} />
-        {gameOverState ? <GameOverPanel onReset={handleReset} /> : ''}
+        <GameStatus gameStatus={gameStatus} />
       </Box>
     </Box>
   )

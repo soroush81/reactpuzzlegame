@@ -59,6 +59,19 @@ export function getBoardSizeArray() {
   return Array.from(Array(Constants.BoardLevel + 1).keys())
 }
 
+export function swapCells(firstCellIndex, secondCellIndex, gameState) {
+  let newGameState = [...gameState]
+  let temp = newGameState[firstCellIndex]
+  newGameState[firstCellIndex] = newGameState[secondCellIndex]
+  newGameState[secondCellIndex] = temp
+  return newGameState
+}
+
+export const checkGameOver = (gameState) => {
+  const winState = getWinState()
+  return CompareGameState(gameState, winState)
+}
+
 function getRandomArbitrary(min, max) {
   return Math.floor(Math.random() * (max - min) + min)
 }
