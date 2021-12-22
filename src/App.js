@@ -1,19 +1,16 @@
 import './App.css'
 import React from 'react'
-import { Box, Button } from '@material-ui/core'
-import BoardRow from './components/BoardRow'
-import * as Constants from './constants/Constants'
+import { Box } from '@material-ui/core'
 import GameOverPanel from './components/GameOverPanel'
-import GameLevel from './components/GameLevel'
 import {
   CompareGameState,
   findNeighborCells,
   initialgame,
   getWinState,
-  getRowCells,
-  getBoardSizeArray,
 } from './utils/GameUtils'
 import { useStyles } from './GameStyle.js'
+import { GameHeader } from './components/GameHeader'
+import GameBoard from './components/GameBoard'
 
 function App() {
   const classes = useStyles()
@@ -73,40 +70,18 @@ function App() {
 
   return (
     <Box className="App">
-      <Box className={classes.HeaderBar}>
-        <Box style={{ flex: 1 }}>
-          <Button variant="contained" onClick={handleReset}>
-            reset
-          </Button>
-        </Box>
-        <Box style={{ flex: 1 }}>moves : {movesCount}</Box>
-        <Box style={{ flex: 1 }}>
-          <GameLevel level={level} onSetLevel={handleLevelChange} />
-        </Box>
-      </Box>
+      <GameHeader
+        headerClass={classes.HeaderBar}
+        movesCount={movesCount}
+        onReset={handleReset}
+        onLevelChange={handleLevelChange}
+        level={level}
+      />
       <Box className={classes.GameContainer}>
-        {getBoardSizeArray().map((i) => (
-          <BoardRow
-            key={i}
-            style={{
-              position: 'absolute',
-              top: (i - 1) * Constants.BoardLevel * 10,
-            }}
-            rowCells={getRowCells(i, gameState)}
-            onClick={handleCellClick}
-          />
-        ))}
+        <GameBoard gameState={gameState} onCellClick={handleCellClick} />
         {gameOverState ? <GameOverPanel onReset={handleReset} /> : ''}
       </Box>
     </Box>
   )
 }
 export default App
-
-{
-  /* <div className="board">
-        {Array.from(Array(Constants.BoardSize).keys()).map((i, index) => (
-          <div key={i} className="square"></div>
-        ))}
-      </div> */
-}
