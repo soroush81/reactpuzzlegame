@@ -66,7 +66,7 @@ function App() {
         onLevelChange={handleLevelChange}
         level={level}
       />
-      <Box className={classes.GameContainer}>
+      <Box className={classes.GamePanel}>
         <GameBoard gameState={gameState} onCellClick={handleCellClick} />
         <GameStatus gameStatus={gameStatus} />
       </Box>

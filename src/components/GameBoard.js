@@ -1,12 +1,12 @@
 import React from 'react'
 import { Box } from '@material-ui/core'
-import { getBoardSizeArray, getRowCells } from '../utils/GameUtils'
+import { getBoardLevelArray, getRowCells } from '../utils/GameUtils'
 import * as Constants from '../constants/Constants'
 import BoardRow from './BoardRow'
 const GameBoard = ({ gameState, onCellClick }) => {
   return (
     <Box>
-      {getBoardSizeArray().map((i) => (
+      {getBoardLevelArray().map((i) => (
         <BoardRow
           key={i}
           style={{

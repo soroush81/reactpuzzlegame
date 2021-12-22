@@ -31,7 +31,8 @@ export const findNeighborCells = (i, gameState) => {
   return neighborCells
 }
 
-export function CompareGameState(gameState, winState) {
+export function CompareGameState(gameState) {
+  const winState = getWinState()
   for (let i = 0; i < gameState.length; i++) {
     if (gameState[i] !== winState[i]) {
       return false
@@ -55,7 +56,7 @@ export function getRowCells(i, gameState) {
   )
 }
 
-export function getBoardSizeArray() {
+export function getBoardLevelArray() {
   return Array.from(Array(Constants.BoardLevel + 1).keys())
 }
 
@@ -68,8 +69,7 @@ export function swapCells(firstCellIndex, secondCellIndex, gameState) {
 }
 
 export const checkGameOver = (gameState) => {
-  const winState = getWinState()
-  return CompareGameState(gameState, winState)
+  return CompareGameState(gameState)
 }
 
 function getRandomArbitrary(min, max) {

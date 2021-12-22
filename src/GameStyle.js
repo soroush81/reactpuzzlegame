@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     borderWidth: 1,
     borderColor: 'gray',
   },
-  GameContainer: {
+  GamePanel: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
