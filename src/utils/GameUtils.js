@@ -48,6 +48,17 @@ export function getWinState() {
   return winState
 }
 
+export function getRowCells(i, gameState) {
+  return gameState.slice(
+    Constants.BoardLevel * (i - 1),
+    Constants.BoardLevel * i,
+  )
+}
+
+export function getBoardSizeArray() {
+  return Array.from(Array(Constants.BoardLevel + 1).keys())
+}
+
 function getRandomArbitrary(min, max) {
   return Math.floor(Math.random() * (max - min) + min)
 }

@@ -1,10 +1,9 @@
 import React from 'react'
 
-const GameOverPanel = ({ onReset }) => {
+const GameOverPanel = () => {
   return (
     <div>
       <div>Game Over. you win</div>
-      <button onClick={onReset}>reset</button>
     </div>
   )
 }

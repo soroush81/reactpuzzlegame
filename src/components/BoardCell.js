@@ -1,11 +1,11 @@
 import React from 'react'
 import * as Constants from '../constants/Constants'
-
+import { Box } from '@material-ui/core'
 const BoardCell = ({ index, number, onClick }) => {
   const backgroundColor = number === 0 ? 'white' : 'lightgreen'
   const color = number === 0 ? 'white' : 'gray'
   return (
-    <div
+    <Box
       key={number}
       onClick={() => onClick(number)}
       style={{
@@ -21,7 +21,7 @@ const BoardCell = ({ index, number, onClick }) => {
       }}
     >
       {number}
-    </div>
+    </Box>
   )
 }
 

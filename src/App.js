@@ -1,22 +1,34 @@
 import './App.css'
 import React from 'react'
+import { Box, Button } from '@material-ui/core'
 import BoardRow from './components/BoardRow'
 import * as Constants from './constants/Constants'
 import GameOverPanel from './components/GameOverPanel'
+import GameLevel from './components/GameLevel'
 import {
   CompareGameState,
   findNeighborCells,
   initialgame,
   getWinState,
+  getRowCells,
+  getBoardSizeArray,
 } from './utils/GameUtils'
+import { useStyles } from './GameStyle.js'
 
 function App() {
-  const [gameState, setGameState] = React.useState(() => initialgame())
+  const classes = useStyles()
+
+  const [gameState, setGameState] = React.useState(() => {
+    const savedGameState = window.localStorage.getItem('gameState')
+    return savedGameState !== null ? JSON.parse(savedGameState) : initialgame()
+  })
   const [gameOverState, setGameOverState] = React.useState(false)
   const [movesCount, setMovesCount] = React.useState(0)
   const [level, setLevel] = React.useState(3)
+
   React.useEffect(() => {
     checkGameOver(gameState)
+    window.localStorage.setItem('gameState', JSON.stringify(gameState))
   }, [gameState])
 
   const checkGameOver = () => {
@@ -35,11 +47,16 @@ function App() {
 
   const handleCellClick = (i) => {
     if (i === 0) return
+
+    //find neighborCells
     let clickedCellIndex = gameState.indexOf(i)
     let neighborCells = findNeighborCells(clickedCellIndex, gameState)
+
+    //check if there is zero cell in neighbors
     const zeroExistsInNeighbors = neighborCells.indexOf(0)
     if (zeroExistsInNeighbors === -1) return
 
+    //swap zero cell and selectedcell
     const zeroIndex = gameState.indexOf(0)
     swapCells(clickedCellIndex, zeroIndex)
   }
@@ -50,52 +67,46 @@ function App() {
     setMovesCount(0)
   }
 
-  const handleChange = (e) => {
+  const handleLevelChange = (e) => {
     setLevel(e.target.value)
   }
 
   return (
-    <div className="App">
-      <div
-        style={{
-          alignSelf: 'center',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: 50,
-            left: 300,
-          }}
-        >
-          {Array.from(Array(Constants.BoardLevel + 1).keys()).map((i) => (
-            <BoardRow
-              key={i}
-              style={{
-                position: 'absolute',
-                top: (i - 1) * Constants.BoardLevel * 10,
-              }}
-              rowCells={gameState.slice(
-                Constants.BoardLevel * (i - 1),
-                Constants.BoardLevel * i,
-              )}
-              onClick={handleCellClick}
-            />
-          ))}
-        </div>
-      </div>
-      <div>moves : {movesCount}</div>
-      <div>{gameOverState ? <GameOverPanel onReset={handleReset} /> : ''}</div>
-      <div>
-        <select value={level} onChange={handleChange}>
-          <option value="3">Easy</option>
-          <option value="4">Medium</option>
-          <option value="5">Hard</option>
-          <option value="6">Expert</option>
-        </select>
-      </div>
-    </div>
+    <Box className="App">
+      <Box className={classes.HeaderBar}>
+        <Box style={{ flex: 1 }}>
+          <Button variant="contained" onClick={handleReset}>
+            reset
+          </Button>
+        </Box>
+        <Box style={{ flex: 1 }}>moves : {movesCount}</Box>
+        <Box style={{ flex: 1 }}>
+          <GameLevel level={level} onSetLevel={handleLevelChange} />
+        </Box>
+      </Box>
+      <Box className={classes.GameContainer}>
+        {getBoardSizeArray().map((i) => (
+          <BoardRow
+            key={i}
+            style={{
+              position: 'absolute',
+              top: (i - 1) * Constants.BoardLevel * 10,
+            }}
+            rowCells={getRowCells(i, gameState)}
+            onClick={handleCellClick}
+          />
+        ))}
+        {gameOverState ? <GameOverPanel onReset={handleReset} /> : ''}
+      </Box>
+    </Box>
   )
 }
-
 export default App
+
+{
+  /* <div className="board">
+        {Array.from(Array(Constants.BoardSize).keys()).map((i, index) => (
+          <div key={i} className="square"></div>
+        ))}
+      </div> */
+}
